@@ -9,7 +9,7 @@ class TestCase extends Laravel\Lumen\Testing\TestCase
      */
     public function createApplication()
     {
-        return require __DIR__.'/../bootstrap/app.php';
+        return require __DIR__ . '/../bootstrap/app.php';
     }
 
     /**
@@ -26,5 +26,35 @@ class TestCase extends Laravel\Lumen\Testing\TestCase
 
         dump($this->response->getStatusCode());
         dump($this->response->headers);
+    }
+
+    /**
+     * @param $header
+     * @return $this
+     */
+    public function seeHasHeader($header)
+    {
+        $this->assertTrue(
+            $this->response->headers->has($header),
+            "Response should has the header '{$header}', but does not"
+        );
+
+        return $this;
+    }
+
+    /**
+     * @param $header
+     * @param $regexp
+     * @return $this
+     */
+    public function seeHeaderWithRegExp($header, $regexp)
+    {
+        $this->seeHasHeader($header)
+            ->assertRegExp(
+                $regexp,
+                $this->response->headers->get($header)
+            );
+
+        return $this;
     }
 }
