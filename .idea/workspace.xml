@@ -3,9 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="47b1be78-4993-4fb9-9938-a49fcdf4d2ef" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/BooksController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/BooksController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/routes.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/routes.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/TestCase.php" beforeDir="false" afterPath="$PROJECT_DIR$/tests/TestCase.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/app/Http/Controllers/BooksControllerTest.php" beforeDir="false" afterPath="$PROJECT_DIR$/tests/app/Http/Controllers/BooksControllerTest.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -66,8 +63,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/tests/app/Http/Controllers/BooksControllerTest.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="482">
-              <caret line="60" column="50" selection-start-line="60" selection-start-column="50" selection-end-line="60" selection-end-column="50" />
+            <state relative-caret-position="813">
+              <caret line="87" column="60" selection-start-line="87" selection-start-column="60" selection-end-line="87" selection-end-column="60" />
             </state>
           </provider>
         </entry>
@@ -286,12 +283,12 @@
       <workItem from="1551343470010" duration="102000" />
       <workItem from="1551368210636" duration="6340000" />
       <workItem from="1551429992911" duration="5137000" />
-      <workItem from="1551447705748" duration="5447000" />
+      <workItem from="1551447705748" duration="6158000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="27292000" />
+    <option name="totallyTimeSpent" value="28003000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="153" y="5" width="1582" height="1017" extended-state="0" />
@@ -479,8 +476,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/tests/app/Http/Controllers/BooksControllerTest.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="482">
-          <caret line="60" column="50" selection-start-line="60" selection-start-column="50" selection-end-line="60" selection-end-column="50" />
+        <state relative-caret-position="813">
+          <caret line="87" column="60" selection-start-line="87" selection-start-column="60" selection-end-line="87" selection-end-column="60" />
         </state>
       </provider>
     </entry>

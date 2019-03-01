@@ -56,6 +56,7 @@ class BooksControllerTest extends TestCase
             ->seeInDatabase('books', ['title' => 'The invisible Man']);
     }
 
+    /** @test */
     public function testStore201AndLocationHeaderSuccess()
     {
         $this->markTestSkipped('skip the test!!');
@@ -67,5 +68,23 @@ class BooksControllerTest extends TestCase
 
         $this->seeStatusCode(201)
             ->seeHeaderWithRegExp('Location', '#/books/[\d]+$#');
+    }
+
+    /** @test */
+    public function testUpdateBookOk()
+    {
+        $this->markTestIncomplete('Missing Implementation');
+    }
+
+    /** @test */
+    public function testUpdateInvalidId()
+    {
+        $this->markTestIncomplete('Missing Implementation');
+    }
+
+    /** @test */
+    public function testUpdateNotMatchWithINvalidId()
+    {
+        $this->markTestIncomplete('Missing Implementation');
     }
 }
