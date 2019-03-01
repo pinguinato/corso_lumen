@@ -19,6 +19,9 @@ class BooksControllerTest extends TestCase
                 'description' => 'A science fiction masterpiece about Martians invading London',
                 'author' => 'H. G. Wells'
             ]);
+        $data = json_decode($this->response->getContent(), true);
+        $this->assertArrayHasKey('created_at', $data);
+        $this->assertArrayHasKey('updated_at', $data);
     }
 
     /** @test */
@@ -33,8 +36,23 @@ class BooksControllerTest extends TestCase
             ]);
     }
 
+    /** @test */
     public function testUrlNotFound()
     {
         $this->markTestIncomplete('Pending Test');
+    }
+
+    /** @test */
+    public function testStoreANewBook()
+    {
+        $this->post('/books', [
+            'title' => 'The invisible Man',
+            'description' => 'An invisible man is trapped in the terror of his own
+creation',
+            'author' => 'H. G. Wells'
+        ]);
+
+        $this->seeJson(['created' => true])
+            ->seeInDatabase('books', ['title' => 'The invisible Man']);
     }
 }
