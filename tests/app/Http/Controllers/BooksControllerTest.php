@@ -14,18 +14,23 @@ class BooksControllerTest extends TestCase
         $this->get('/books/1')
             ->seeStatusCode(200)
             ->seeJson([
-               'id' => 1,
-               'title' => 'War of the Worlds',
-               'description' => 'A science fiction masterpiece about Martians invading London',
-               'author' => 'H. G. Wells'
+                'id' => 1,
+                'title' => 'War of the Worlds',
+                'description' => 'A science fiction masterpiece about Martians invading London',
+                'author' => 'H. G. Wells'
             ]);
-        $this->printResponse();
     }
 
     /** @test */
     public function testShowFailBookNotExists()
     {
-        $this->markTestIncomplete('Pending Test');
+        $this->get('/books/99999')
+            ->seeStatusCode(404)
+            ->seeJson([
+                'error' => [
+                    'message' => 'Book not found'
+                ]
+            ]);
     }
 
     public function testUrlNotFound()
