@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Book;
+
 class BooksController extends Controller
 {
     /**
-     * @return []
+     * GET /books
+     * @return Book[]|\Illuminate\Database\Eloquent\Collection
      */
     public function index()
     {
-        return [
-            ['title' => 'La guerra dei mondi'],
-            ['title' => 'Il vecchio e il mare']
-        ];
+        return Book::all();
     }
 }

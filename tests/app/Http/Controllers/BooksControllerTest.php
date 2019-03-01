@@ -6,6 +6,17 @@ class BooksControllerTest extends TestCase
     public function testIndexStatusCodeIs200()
     {
         $this->get('/books')->seeStatusCode(200);
-        $this->assertEquals('[]', $this->response->getContent());
+    }
+
+    /** @test */
+    public function testShowReturnAValidBook()
+    {
+        $this->markTestIncomplete('Pending Test');
+    }
+
+    /** @test */
+    public function testShowFailBookNotExists()
+    {
+        $this->markTestIncomplete('Pending Test');
     }
 }
