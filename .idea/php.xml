@@ -69,6 +69,7 @@
       <path value="$PROJECT_DIR$/vendor/mtdowling/cron-expression" />
       <path value="$PROJECT_DIR$/vendor/phpspec/prophecy" />
       <path value="$PROJECT_DIR$/vendor/symfony/var-dumper" />
+      <path value="$PROJECT_DIR$/vendor/arvenil/ninja-mutex" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="5.5.0" />

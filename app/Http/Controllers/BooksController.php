@@ -14,4 +14,13 @@ class BooksController extends Controller
     {
         return Book::all();
     }
+
+    /**
+     * @param $id
+     * @return mixed
+     */
+    public function show($id)
+    {
+        return Book::findOrFail($id);
+    }
 }
