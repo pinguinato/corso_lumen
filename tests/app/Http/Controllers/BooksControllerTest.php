@@ -15,9 +15,9 @@ class BooksControllerTest extends TestCase
             ->seeStatusCode(200)
             ->seeJson([
                 'id' => 1,
-                'title' => 'The War of the Worlds United',
+                'title' => 'The War of the Worlds',
                 'description' => 'The book is way better than the movie',
-                'author' => 'Wells, H. G.'
+                'author' => 'Wells, H.G.'
             ]);
         $data = json_decode($this->response->getContent(), true);
         $this->assertArrayHasKey('created_at', $data);
@@ -37,12 +37,6 @@ class BooksControllerTest extends TestCase
     }
 
     /** @test */
-    public function testUrlNotFound()
-    {
-        $this->markTestIncomplete('Pending Test');
-    }
-
-    /** @test */
     public function testStoreANewBook()
     {
         $this->markTestSkipped('skip the test!!');
@@ -59,7 +53,7 @@ class BooksControllerTest extends TestCase
     /** @test */
     public function testStore201AndLocationHeaderSuccess()
     {
-        $this->markTestSkipped('skip the test!!');
+        $this->markTestSkipped('Because this create a real book on the database');
         $this->post('/books', [
             'title' => 'Lorem ipsum',
             'description' => 'Lorem ipsum dolor sin amet',
@@ -71,20 +65,48 @@ class BooksControllerTest extends TestCase
     }
 
     /** @test */
-    public function testUpdateBookOk()
+    public function updateShouldOnlyChangeFillableFields()
     {
-        $this->markTestIncomplete('Missing Implementation');
+        $this->markTestSkipped('Because update a real book');
+
+        $this->notSeeInDatabase('books',[
+           'title' => 'The War of the Worlds'
+        ]);
+
+        $this->put('/books/1', [
+           'id' => 5,
+           'title' => 'The War of the Worlds',
+           'description' => 'The book is way better than the movie',
+           'author' => 'Wells, H.G.'
+        ]);
+
+        $this->seeStatusCode(200)->seeJson([
+            'id' => 1,
+            'title' => 'The War of the Worlds',
+            'description' => 'The book is way better than the movie',
+            'author' => 'Wells, H.G.'
+        ])->seeInDatabase('books', [
+            'title' => 'The War of the Worlds'
+        ]);
     }
 
     /** @test */
-    public function testUpdateInvalidId()
+    public function shouldFailWithAnInvalidId()
     {
-        $this->markTestIncomplete('Missing Implementation');
+        $this->put('/books/99999999999999')
+            ->seeStatusCode(404)
+            ->seeJsonEquals([
+              'error' => [
+                  'message' => 'Book not found'
+              ]
+            ]);
     }
 
     /** @test */
-    public function testUpdateNotMatchWithINvalidId()
+    public function updateShouldNoMatchAnInvalidRoute()
     {
-        $this->markTestIncomplete('Missing Implementation');
+        $this->put('/books/this-is-invalid')
+            ->seeStatusCode(404);
     }
+
 }
