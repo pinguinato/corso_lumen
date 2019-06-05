@@ -24,6 +24,7 @@ class BooksController extends Controller
     public function show($id)
     {
         try {
+            /** @return Book */
             return Book::findOrFail($id);
         } catch (ModelNotFoundException $e) {
             return response()->json([
@@ -46,5 +47,20 @@ class BooksController extends Controller
             'created' => true],
             201,
             ['Location' => route('books.show', ['id' => $book->id])]);
+    }
+
+    /**
+     * @param Request $request
+     * @param $id
+     * @return mixed
+     */
+    public function update(Request $request, $id)
+    {
+        /** @var Book $book */
+        $book = Book::findOrFail($id);
+        $book->fill($request->all());
+        $book->save();
+
+        return $book;
     }
 }

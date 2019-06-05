@@ -15,9 +15,9 @@ class BooksControllerTest extends TestCase
             ->seeStatusCode(200)
             ->seeJson([
                 'id' => 1,
-                'title' => 'War of the Worlds',
-                'description' => 'A science fiction masterpiece about Martians invading London',
-                'author' => 'H. G. Wells'
+                'title' => 'The War of the Worlds United',
+                'description' => 'The book is way better than the movie',
+                'author' => 'Wells, H. G.'
             ]);
         $data = json_decode($this->response->getContent(), true);
         $this->assertArrayHasKey('created_at', $data);

@@ -15,6 +15,10 @@ $app->get('/', function () use ($app) {
     return $app->version();
 });
 
+$app->get('/hello/world', function () use ($app){
+   return "Hello World!";
+});
+
 $app->get('/books', 'BooksController@index');
 
 $app->get('/books/{id:[\d]+}', [
@@ -23,4 +27,5 @@ $app->get('/books/{id:[\d]+}', [
 ]);
 
 $app->post('/books', 'BooksController@store');
+$app->put('/books/{id:[\d]+}', 'BooksController@update');
 
