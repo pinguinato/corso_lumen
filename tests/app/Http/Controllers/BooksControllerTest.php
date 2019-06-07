@@ -10,12 +10,6 @@ class BooksControllerTest extends TestCase
     use DatabaseMigrations;
 
     /** @test */
-    public function testIndexStatusCodeIs200()
-    {
-        $this->get('/books')->seeStatusCode(200);
-    }
-
-    /** @test */
     public function testShowReturnAValidBook()
     {
         $book = factory('App\Book')->create();
@@ -38,12 +32,11 @@ class BooksControllerTest extends TestCase
     /** @test */
     public function testShowFailBookNotExists()
     {
-        $this->get('/books/99999')
+        $this->get('/books/99999', ['Accept' => 'application/json'])
             ->seeStatusCode(404)
             ->seeJson([
-                'error' => [
-                    'message' => 'Book not found'
-                ]
+                    'message' => 'Not Found',
+                    'status' => 404
             ]);
     }
 
@@ -200,5 +193,11 @@ class BooksControllerTest extends TestCase
                'title' => $book->title
             ]);
         }
+    }
+
+    /** @test */
+    public function testIndexStatusCodeIs200()
+    {
+        $this->get('/books')->seeStatusCode(200)->seeJson([]);
     }
 }

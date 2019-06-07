@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class HandlerTest extends TestCase
 {
@@ -74,6 +75,11 @@ class HandlerTest extends TestCase
               'mock' => AccessDeniedHttpException::class,
               'status' => 403,
               'message' => 'Forbidden'
+          ],
+          [
+              'mock' => ModelNotFoundException::class,
+              'status' => 404,
+              'message' => 'Not Found'
           ]
         ];
 
