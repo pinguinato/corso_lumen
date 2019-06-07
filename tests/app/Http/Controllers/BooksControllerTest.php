@@ -12,6 +12,7 @@ class BooksControllerTest extends TestCase
     /** @test */
     public function testShowReturnAValidBook()
     {
+        $this->markTestSkipped();
         $book = factory('App\Book')->create();
 
         $this->get("/books/{$book->id}")
@@ -43,7 +44,6 @@ class BooksControllerTest extends TestCase
     /** @test */
     public function testStoreANewBook()
     {
-        $this->markTestSkipped('skip the test!!');
         $this->post('/books', [
             'title' => 'The invisible Man',
             'description' => 'An invisible man is trapped in the terror of his own creation',
@@ -57,7 +57,6 @@ class BooksControllerTest extends TestCase
     /** @test */
     public function testStore201AndLocationHeaderSuccess()
     {
-        $this->markTestSkipped('Because this create a real book on the database');
         $this->post('/books', [
             'title' => 'Lorem ipsum',
             'description' => 'Lorem ipsum dolor sin amet',
