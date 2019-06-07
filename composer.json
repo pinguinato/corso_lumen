@@ -9,7 +9,8 @@
         "laravel/lumen-framework": "5.2.*",
         "vlucas/phpdotenv": "~2.2",
         "symfony/var-dumper": "^3.2",
-        "arvenil/ninja-mutex": "^0.6.0"
+        "arvenil/ninja-mutex": "^0.6.0",
+        "mockery/mockery": "^1.2"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
