@@ -21,6 +21,7 @@
     </filter>
     <php>
         <env name="APP_ENV" value="testing"/>
+        <env name="DB_DATABASE" value="bookr_testing"/> <!-- questo prova un sacco di errori perchè punta un altro DB -->
         <env name="CACHE_DRIVER" value="array"/>
     </php>
 </phpunit>

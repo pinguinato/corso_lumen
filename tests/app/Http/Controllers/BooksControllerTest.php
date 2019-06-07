@@ -1,7 +1,14 @@
 <?php
 
+namespace Tests\App\Http\Controllers;
+
+use TestCase;
+use Laravel\Lumen\Testing\DatabaseMigrations;
+
 class BooksControllerTest extends TestCase
 {
+    use DatabaseMigrations;
+
     /** @test */
     public function testIndexStatusCodeIs200()
     {
@@ -11,15 +18,19 @@ class BooksControllerTest extends TestCase
     /** @test */
     public function testShowReturnAValidBook()
     {
-        $this->get('/books/1')
+        $book = factory('App\Book')->create();
+
+        $this->get("/books/{$book->id}")
             ->seeStatusCode(200)
             ->seeJson([
-                'id' => 1,
-                'title' => 'The War of the Worlds',
-                'description' => 'The book is way better than the movie',
-                'author' => 'Wells, H.G.'
-            ]);
+                'id' => $book->id,
+                'title' => $book->title,
+                'description' => $book->description,
+//                'author' => $book->author
+           ]);
+
         $data = json_decode($this->response->getContent(), true);
+
         $this->assertArrayHasKey('created_at', $data);
         $this->assertArrayHasKey('updated_at', $data);
     }
@@ -90,6 +101,44 @@ class BooksControllerTest extends TestCase
         ]);
     }
 
+    /** #@test */
+    public function testRefactoringUpdateShouldOnlyChangeFillableFields()
+    {
+        $book = factory('App\Book')->create([
+           'title' =>  'The War of the Worlds',
+           'description' => 'The book is way better than the movie',
+           'author' => 'Wells, H.G.'
+        ]);
+
+        $this->put("/books/{$book->id}", [
+           'id' => 5,
+           'title' => 'Book updated',
+           'description' => 'The book is way better than the movie',
+           'author' => 'Roberto Gianotto'
+        ]);
+
+        $this->seeStatusCode(200)
+            ->seeJson([
+               'id' => 1,
+               'title' => 'Book updated',
+               'description' =>  'The book is way better than the movie',
+               'author' => 'Roberto Gianotto'
+            ])
+           ->seeInDatabase('books', [
+              'title' => 'Book updated'
+           ]);
+    }
+
+    /** #@test */
+    public function testRefactorRemoveAValidBook()
+    {
+        $book = factory('App\Book')->create();
+
+        $this->delete("/books/{$book->id}")->seeStatusCode(204)->isEmpty();
+
+        $this->notSeeInDatabase('books', ['id' => $book->id]);
+    }
+
     /** @test */
     public function testShouldFailWithAnInvalidId()
     {
@@ -120,6 +169,7 @@ class BooksControllerTest extends TestCase
         $this->notSeeInDatabase('books', ['id' => 13]);
     }
 
+    /** #@test */
     public function testRemoveReturnA404WithAnInvalidId()
     {
         $this->delete('/books/999999999999')
@@ -131,9 +181,24 @@ class BooksControllerTest extends TestCase
             ]);
     }
 
+    /** #@test */
     public function testRemoveShouldNotMathAValidRoute()
     {
         $this->delete('/books/this-is-invalid')
             ->seeStatusCode(404);
+    }
+
+    /** #@test */
+    public function indexShouldReturnACollectionOfRecords()
+    {
+        $books = factory('App\Book', 2)->create();
+
+        $this->get('/books');
+
+        foreach ($books as $book){
+            $this->seeJson([
+               'title' => $book->title
+            ]);
+        }
     }
 }
