@@ -72,4 +72,26 @@ class BooksController extends Controller
 
         return $book;
     }
+
+    /**
+     * @param Request $request
+     * @param $id
+     * @return \Laravel\Lumen\Http\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+     */
+    public function destroy(Request $request, $id)
+    {
+        try{
+            $book = Book::findOrFail($id);
+        } catch (ModelNotFoundException $ecc) {
+            return response()->json([
+                'error' => [
+                    'message' => 'Book not found'
+                ]
+            ], 404);
+        }
+
+        $book->delete();
+
+        return response(null, 204);
+    }
 }

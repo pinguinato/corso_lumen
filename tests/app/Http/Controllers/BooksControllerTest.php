@@ -65,7 +65,7 @@ class BooksControllerTest extends TestCase
     }
 
     /** @test */
-    public function updateShouldOnlyChangeFillableFields()
+    public function testUpdateShouldOnlyChangeFillableFields()
     {
         $this->markTestSkipped('Because update a real book');
 
@@ -91,7 +91,7 @@ class BooksControllerTest extends TestCase
     }
 
     /** @test */
-    public function shouldFailWithAnInvalidId()
+    public function testShouldFailWithAnInvalidId()
     {
         $this->put('/books/99999999999999')
             ->seeStatusCode(404)
@@ -103,10 +103,37 @@ class BooksControllerTest extends TestCase
     }
 
     /** @test */
-    public function updateShouldNoMatchAnInvalidRoute()
+    public function testUpdateShouldNoMatchAnInvalidRoute()
     {
         $this->put('/books/this-is-invalid')
             ->seeStatusCode(404);
     }
 
+    /** #@test */
+    public function testRemoveAValidBook()
+    {
+        $this->markTestSkipped();
+        $this->delete('/books/13')
+            ->seeStatusCode(204)
+            ->isEmpty();
+
+        $this->notSeeInDatabase('books', ['id' => 13]);
+    }
+
+    public function testRemoveReturnA404WithAnInvalidId()
+    {
+        $this->delete('/books/999999999999')
+            ->seeStatusCode(404)
+            ->seeJsonEquals([
+               'error' => [
+                   'message' => 'Book not found'
+               ]
+            ]);
+    }
+
+    public function testRemoveShouldNotMathAValidRoute()
+    {
+        $this->delete('/books/this-is-invalid')
+            ->seeStatusCode(404);
+    }
 }
