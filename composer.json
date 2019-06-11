@@ -10,7 +10,8 @@
         "vlucas/phpdotenv": "~2.2",
         "symfony/var-dumper": "^3.2",
         "arvenil/ninja-mutex": "^0.6.0",
-        "mockery/mockery": "^1.2"
+        "mockery/mockery": "^1.2",
+        "league/fractal": "^0.18.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
