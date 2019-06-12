@@ -2,12 +2,39 @@
 
 namespace Tests\App\Http\Controllers;
 
+use App\Book;
 use TestCase;
 use Laravel\Lumen\Testing\DatabaseMigrations;
 
 class BooksControllerTest extends TestCase
 {
     use DatabaseMigrations;
+
+
+    public function testStoreAnewBookIntoTheDatabase()
+    {
+        $this->markTestSkipped();
+        $this->post('/books', [
+           'title' => 'The Invisible Man',
+           'description' => 'An invisible man is trapped in the terror of his own
+creation',
+           'author' => 'H. G. Wells'
+        ]);
+
+        $body = json_decode($this->response->getContent(), true);
+
+        $this->assertArrayHasKey('data', $body);
+
+        $data = $body['data'];
+
+        $this->assertEquals('The Invisible Man', $data['title']);
+        $this->assertEquals('An invisible man is trapped in the terror of his own
+creation', $data['description']);
+        $this->assertEquals('H. G. Wells', $data['author']);
+        $this->assertTrue($data['id'] > 0);
+        $this->seeInDatabase('books', ['title' => 'The Invisible Man']);
+    }
+
 
     /** @test */
     public function testShowReturnAValidBook()
@@ -21,7 +48,7 @@ class BooksControllerTest extends TestCase
                 'id' => $book->id,
                 'title' => $book->title,
                 'description' => $book->description,
-//                'author' => $book->author
+                'author' => $book->author
            ]);
 
         $data = json_decode($this->response->getContent(), true);
@@ -50,8 +77,18 @@ class BooksControllerTest extends TestCase
             'author' => 'H. G. Wells'
         ]);
 
-        $this->seeJson(['created' => true])
-            ->seeInDatabase('books', ['title' => 'The invisible Man']);
+        $this->seeJsonStructure([
+            'data' => [
+                'title',
+                'description',
+                'author',
+                'updated_at',
+                'created_at',
+                'id',
+            ]
+        ]);
+
+        $this->seeInDatabase('books', ['title' => 'The invisible Man']);
     }
 
     /** @test */
@@ -100,6 +137,12 @@ class BooksControllerTest extends TestCase
            'title' =>  'The War of the Worlds',
            'description' => 'The book is way better than the movie',
            'author' => 'Wells, H.G.'
+        ]);
+
+        $this->seeInDatabase('books', [
+           'title' =>  'The War of the Worlds',
+            'description' => 'The book is way better than the movie',
+            'author' => 'Wells, H.G.'
         ]);
 
         $this->put("/books/{$book->id}", [
@@ -187,11 +230,33 @@ class BooksControllerTest extends TestCase
 
         $this->get('/books');
 
-        foreach ($books as $book){
-            $this->seeJson([
-               'title' => $book->title
-            ]);
-        }
+        // nuova modifica con Fractal
+        $expected = [
+          'data' => $books->toArray()
+        ];
+
+
+
+        $this->seeJsonEquals($expected);
+        // fine nuova versione con Fractal
+
+//        foreach ($books as $book){
+//            $this->seeJson([
+//               'title' => $book->title
+//            ]);
+//        }
+    }
+
+    /** @test */
+    public function testShouldReturnAValidBookNewVersion()
+    {
+        $book = factory('App\Book')->create();
+
+        $expected = [
+            'data' => $book->toArray()
+        ];
+
+        $this->get("/books/{$book->id}")->seeStatusCode(200)->seeJsonEquals($expected);
     }
 
     /** @test */

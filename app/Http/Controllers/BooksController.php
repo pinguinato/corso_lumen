@@ -14,7 +14,11 @@ class BooksController extends Controller
      */
     public function index()
     {
-        return Book::all();
+        //return Book::all();
+
+        // modifica per Fractal
+
+        return ['data' => Book::all()->toArray()];
     }
 
     /**
@@ -34,7 +38,11 @@ class BooksController extends Controller
 //            ], 404);
 //        }
 
-        return Book::findOrFail($id);
+//        return Book::findOrFail($id);
+
+        $result = ['data' => Book::findOrFail($id)->toArray()];
+
+        return $result;
     }
 
     /**
@@ -45,10 +53,17 @@ class BooksController extends Controller
     {
         $book = Book::create($request->all());
 
-        return response()->json([
-            'created' => true],
+//        return response()->json([
+//            'created' => true],
+//            201,
+//            ['Location' => route('books.show', ['id' => $book->id])]);
+
+        return response()->json(
+            ['data' => $book->toArray()],
             201,
-            ['Location' => route('books.show', ['id' => $book->id])]);
+            ['Location' => route('books.show',
+            ['id' => $book->id])]
+        );
     }
 
     /**
@@ -72,7 +87,9 @@ class BooksController extends Controller
         $book->fill($request->all());
         $book->save();
 
-        return $book;
+//        return $book;
+
+        return ['data' => $book->toArray()];
     }
 
     /**
