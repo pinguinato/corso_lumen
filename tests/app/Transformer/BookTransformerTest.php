@@ -12,7 +12,7 @@ class BookTransformerTest extends TestCase
     use DatabaseMigrations;
 
     /** @test */
-    public function it_can_be_initialized()
+    public function it_transform_a_book_model()
     {
         $book = factory('App\Book')->create();
 
