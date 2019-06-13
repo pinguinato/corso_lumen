@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Book;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+// integrazione di fractal response nuovo servizio
+use App\Transformer\BookTransformer;
 
 class BooksController extends Controller
 {
@@ -17,8 +19,10 @@ class BooksController extends Controller
         //return Book::all();
 
         // modifica per Fractal
+//        return ['data' => Book::all()->toArray()];
 
-        return ['data' => Book::all()->toArray()];
+        // ecco come agganciare la giusta risposta con il servizio
+        return $this->collection(Book::all(), new BookTransformer());
     }
 
     /**
