@@ -44,9 +44,14 @@ class BooksController extends Controller
 
 //        return Book::findOrFail($id);
 
-        $result = ['data' => Book::findOrFail($id)->toArray()];
+//        $result = ['data' => Book::findOrFail($id)->toArray()];
+//
+//        return $result;
 
-        return $result;
+        // ecco come agganciare la giusta risposta con il servizio
+
+        return $this->item(Book::findOrFail($id), new BookTransformer());
+
     }
 
     /**
@@ -62,12 +67,20 @@ class BooksController extends Controller
 //            201,
 //            ['Location' => route('books.show', ['id' => $book->id])]);
 
-        return response()->json(
-            ['data' => $book->toArray()],
-            201,
-            ['Location' => route('books.show',
-            ['id' => $book->id])]
-        );
+//        return response()->json(
+//            ['data' => $book->toArray()],
+//            201,
+//            ['Location' => route('books.show',
+//            ['id' => $book->id])]
+//        );
+
+        // refactor per agganciare la risposta del nuovo servizio
+
+        $data = $this->item($book, new BookTransformer());
+
+        return response()->json($data, 201, [
+           'Location' => route('books.show', ['id' => $book->id])
+        ]);
     }
 
     /**
@@ -93,7 +106,10 @@ class BooksController extends Controller
 
 //        return $book;
 
-        return ['data' => $book->toArray()];
+//        return ['data' => $book->toArray()];
+
+        // refactoring per agganciare il nuovo servizio
+        return $this->item($book, new BookTransformer());
     }
 
     /**
