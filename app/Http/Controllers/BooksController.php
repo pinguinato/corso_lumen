@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Book;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 // integrazione di fractal response nuovo servizio
 use App\Transformer\BookTransformer;
+use Illuminate\Http\Response;
 
 class BooksController extends Controller
 {
@@ -56,10 +58,19 @@ class BooksController extends Controller
 
     /**
      * @param Request $request
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return JsonResponse
      */
     public function store(Request $request)
     {
+        /**
+         * Validazione nel controller uso del metodo validate()
+         */
+        $this->validate($request, [
+           'title' => 'required',
+           'description' => 'required',
+           'author' => 'required'
+        ]);
+
         $book = Book::create($request->all());
 
 //        return response()->json([
@@ -100,6 +111,15 @@ class BooksController extends Controller
                 ]
             ], 404);
         }
+
+        /**
+         * Validazione nel controller uso del metodo validate()
+         */
+        $this->validate($request, [
+            'title' => 'required',
+            'description' => 'required',
+            'author' => 'required'
+        ]);
 
         $book->fill($request->all());
         $book->save();
