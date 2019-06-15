@@ -87,16 +87,24 @@ creation', $data['description']);
     /** @test */
     public function testStoreANewBookIntoTheDatabaseRevisitedWithCarbonAndFractalResponses()
     {
+        $author = factory(\App\Author::class)->create([
+            'name' => 'H. G. Wells'
+        ]);
+
         $this->post('/books', [
             'title' => 'The invisible Man',
             'description' => 'An invisible man is trapped in the terror of his own creation',
-            'author' => 'H. G. Wells'
+            'author_id' => $author->id
         ]);
 
         $body = json_decode($this->response->getContent(), true);
+
+        //dd($body, $this->response->getStatusCode());
+
         $this->assertArrayHasKey('data', $body);
 
         $data = $body['data'];
+
         $this->assertEquals('The invisible Man', $data['title']);
         $this->assertEquals('An invisible man is trapped in the terror of his own creation', $data['description']);
         $this->assertEquals('H. G. Wells', $data['author']);

@@ -61,4 +61,31 @@ class TestCase extends Laravel\Lumen\Testing\TestCase
 
         return $this;
     }
+
+    /**
+     * Questo metodo crea un autore nel DB e poi popola un libro con il modello
+     * dell'autore appena creato, il count verifica se c'è bisogno di creare
+     * uno o più autori da associare ad 1 o più libri
+     *
+     * @param int $count
+     * @return mixed
+     */
+    public function bookFactory($count = 1)
+    {
+        $author = factory(\App\Author::class)->create();
+
+        $books = factory(\App\Book::class)->make();
+
+        if ($count === 1){
+            $books->author()->associate($author);
+            $books->save();
+        } else {
+            $books->each(function ($book) use ($author) {
+                $book->author()->associate($author);
+                $book->save();
+            });
+        }
+
+        return $books;
+    }
 }

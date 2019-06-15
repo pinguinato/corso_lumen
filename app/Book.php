@@ -11,7 +11,7 @@ class Book extends Model
      *
      * @var []
      */
-    protected $fillable = ['title', 'description', 'author'];
+    protected $fillable = ['title', 'description', 'author_id'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
