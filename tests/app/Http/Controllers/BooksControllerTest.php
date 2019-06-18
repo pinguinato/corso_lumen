@@ -29,12 +29,15 @@ class BooksControllerTest extends TestCase
 
     public function testStoreAnewBookIntoTheDatabase()
     {
-        $this->markTestSkipped();
+        $author = factory(\App\Author::class)->create([
+            'name' => 'H. G. Wells'
+        ]);
+
         $this->post('/books', [
            'title' => 'The Invisible Man',
            'description' => 'An invisible man is trapped in the terror of his own
 creation',
-           'author' => 'H. G. Wells'
+           'author_id' => $author->id
         ]);
 
         $body = json_decode($this->response->getContent(), true);
@@ -98,8 +101,6 @@ creation', $data['description']);
         ]);
 
         $body = json_decode($this->response->getContent(), true);
-
-        //dd($body, $this->response->getStatusCode());
 
         $this->assertArrayHasKey('data', $body);
 
