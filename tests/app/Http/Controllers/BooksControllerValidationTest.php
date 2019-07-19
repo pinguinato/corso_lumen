@@ -21,18 +21,15 @@ class BooksControllerValidationTest extends TestCase
 
         $this->assertArrayHasKey('title', $body);
         $this->assertArrayHasKey('description', $body);
-        $this->assertArrayHasKey('author', $body);
 
         $this->assertEquals(["The title field is required."], $body['title']);
         $this->assertEquals(["Please provide a description."], $body['description']);
-        $this->assertEquals(["The author field is required."], $body['author']);
     }
 
     /** @test */
     public function testItValidatesRequiredFieldsWhenUpgradingABook()
     {
-        $book = factory(\App\Book::class)->create();
-
+        $book = $this->bookFactory();
         $this->put("/books/{$book->id}", [], ['Accept' => 'application/json']);
 
         $this->assertEquals(Response::HTTP_UNPROCESSABLE_ENTITY, $this->response->getStatusCode());
@@ -41,23 +38,21 @@ class BooksControllerValidationTest extends TestCase
 
         $this->assertArrayHasKey('title', $body);
         $this->assertArrayHasKey('description', $body);
-        $this->assertArrayHasKey('author', $body);
 
         $this->assertEquals(["The title field is required."], $body['title']);
         $this->assertEquals(["Please provide a description."], $body['description']);
-        $this->assertEquals(["The author field is required."], $body['author']);
     }
 
     /** @test */
     public function testTitleFailsCreateValidationWhenJustTooLong()
     {
-        $book = factory(\App\Book::class)->make(); // invece di usare create(), perché permette di avere un modello non salvato in maniera per sistente nel DB
+        $book = $this->bookFactory();
         $book->title = str_repeat('a', 256);
 
         $this->post("/books", [
            'title' => $book->title,
            'description' => $book->description,
-           'author' => $book->author
+           'author' => $book->author->id
         ], ['Accept' => 'application/json']);
 
         $this->seeStatusCode(Response::HTTP_UNPROCESSABLE_ENTITY)
@@ -67,13 +62,13 @@ class BooksControllerValidationTest extends TestCase
 
     public function testTitleFailsUpdatingValidationWhenJustTooLong()
     {
-        $book = factory(\App\Book::class)->create();
+        $book = $this->bookFactory();
         $book->title = str_repeat('a', 256);
 
         $this->put("/books/{$book->id}", [
             'title' => $book->title,
             'description' => $book->description,
-            'author' => $book->author
+            'author' => $book->author->id
         ], ['Accept' => 'application/json']);
 
         $this->seeStatusCode(Response::HTTP_UNPROCESSABLE_ENTITY)
@@ -83,13 +78,13 @@ class BooksControllerValidationTest extends TestCase
 
     public function testTitlePassingCreateValidationWhenExactlyMax()
     {
-        $book = factory(\App\Book::class)->make();
+        $book = $this->bookFactory();
         $book->title = str_repeat('a', 255);
 
         $this->post("/books", [
             'title' => $book->title,
             'description' => $book->description,
-            'author' => $book->author
+            'author_id' => $book->author->id
         ], ['Accept' => 'application/json']);
 
         $this->seeStatusCode(Response::HTTP_CREATED)
@@ -98,13 +93,13 @@ class BooksControllerValidationTest extends TestCase
 
     public function testTitlePassingUpdatingValidationWhenExactlyMax()
     {
-        $book = factory(\App\Book::class)->create();
+        $book = $this->bookFactory();
         $book->title = str_repeat('a', 255);
 
         $this->put("/books/{$book->id}", [
             'title' => $book->title,
             'description' => $book->description,
-            'author' => $book->author
+            'author_id' => $book->author->id
         ], ['Accept' => 'application/json']);
 
         $this->seeStatusCode(Response::HTTP_OK)

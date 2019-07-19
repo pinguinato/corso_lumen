@@ -18,11 +18,6 @@ class BooksController extends Controller
      */
     public function index()
     {
-        //return Book::all();
-
-        // modifica per Fractal
-//        return ['data' => Book::all()->toArray()];
-
         // ecco come agganciare la giusta risposta con il servizio
         return $this->collection(Book::all(), new BookTransformer());
     }
@@ -33,27 +28,7 @@ class BooksController extends Controller
      */
     public function show($id)
     {
-//        try {
-//            /** @return Book */
-//            return Book::findOrFail($id);
-//        } catch (ModelNotFoundException $e) {
-//            return response()->json([
-//                'error' => [
-//                    'message' => 'Book not found'
-//                ]
-//            ], 404);
-//        }
-
-//        return Book::findOrFail($id);
-
-//        $result = ['data' => Book::findOrFail($id)->toArray()];
-//
-//        return $result;
-
-        // ecco come agganciare la giusta risposta con il servizio
-
         return $this->item(Book::findOrFail($id), new BookTransformer());
-
     }
 
     /**
@@ -74,20 +49,6 @@ class BooksController extends Controller
         ]);
 
         $book = Book::create($request->all());
-
-//        return response()->json([
-//            'created' => true],
-//            201,
-//            ['Location' => route('books.show', ['id' => $book->id])]);
-
-//        return response()->json(
-//            ['data' => $book->toArray()],
-//            201,
-//            ['Location' => route('books.show',
-//            ['id' => $book->id])]
-//        );
-
-        // refactor per agganciare la risposta del nuovo servizio
 
         $data = $this->item($book, new BookTransformer());
 
@@ -120,17 +81,13 @@ class BooksController extends Controller
         $this->validate($request, [
             'title' => 'required|max:255',
             'description' => 'required',
-            'author' => 'required'
+            'author_id' => 'required|exists:authors,id'
         ], [
             'description.required' => 'Please provide a :attribute.'
         ]);
 
         $book->fill($request->all());
         $book->save();
-
-//        return $book;
-
-//        return ['data' => $book->toArray()];
 
         // refactoring per agganciare il nuovo servizio
         return $this->item($book, new BookTransformer());
